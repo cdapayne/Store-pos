@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💳 Point of Sale</h1>
+            <nav>
+                <a href="/">Store</a>
+                <a href="/pos">POS</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="pos-layout">
+            <div class="pos-products">
+                <h2>Products</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                </div>
+                <div id="posProducts" class="pos-products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+
+            <div class="pos-cart">
+                <h2>Current Sale</h2>
+                <div id="posCartItems" class="pos-cart-items">
+                    <!-- Cart items will appear here -->
+                </div>
+                <div class="pos-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span>$<span id="posSubtotal">0.00</span></span>
+                    </div>
+                    <div class="total-row">
+                        <span>Tax (8%):</span>
+                        <span>$<span id="posTax">0.00</span></span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>Total:</span>
+                        <span>$<span id="posTotal">0.00</span></span>
+                    </div>
+                </div>
+                <div class="pos-actions">
+                    <button id="posClearBtn" class="btn btn-secondary btn-block">Clear</button>
+                    <button id="posCheckoutBtn" class="btn btn-primary btn-block">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- POS Checkout Modal -->
+    <div id="posCheckoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Complete Sale</h2>
+            <form id="posCheckoutForm">
+                <div class="form-group">
+                    <label>Customer Name (Optional):</label>
+                    <input type="text" id="posCustomerName">
+                </div>
+                <div class="form-group">
+                    <label>Payment Method:</label>
+                    <select id="posPaymentMethod" required>
+                        <option value="cash">Cash</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="debit_card">Debit Card</option>
+                        <option value="mobile_payment">Mobile Payment</option>
+                    </select>
+                </div>
+                <div class="checkout-total">
+                    <h3>Total: $<span id="posCheckoutTotal">0.00</span></h3>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Complete Sale</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div id="receiptModal" class="modal">
+        <div class="modal-content receipt">
+            <span class="close">&times;</span>
+            <div id="receiptContent">
+                <!-- Receipt will be generated here -->
+            </div>
+            <button id="printReceiptBtn" class="btn btn-primary btn-block">Print Receipt</button>
+        </div>
+    </div>
+
+    <script src="pos.js"></script>
+</body>
+</html>
