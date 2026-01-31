@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>⚙️ Admin Panel</h1>
+            <nav>
+                <a href="/">Store</a>
+                <a href="/pos">POS</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="products">Products</button>
+            <button class="tab-btn" data-tab="inventory">Inventory</button>
+            <button class="tab-btn" data-tab="ingredients">Ingredients</button>
+            <button class="tab-btn" data-tab="orders">Orders</button>
+            <button class="tab-btn" data-tab="reports">Reports</button>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="products-tab" class="tab-content active">
+            <div class="tab-header">
+                <h2>Products Management</h2>
+                <button id="addProductBtn" class="btn btn-primary">Add Product</button>
+            </div>
+            <div id="productsList" class="data-table">
+                <!-- Products table will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Inventory Tab -->
+        <div id="inventory-tab" class="tab-content">
+            <h2>Inventory Management</h2>
+            <div id="inventoryList" class="data-table">
+                <!-- Inventory table will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Ingredients Tab -->
+        <div id="ingredients-tab" class="tab-content">
+            <div class="tab-header">
+                <h2>Ingredients Management</h2>
+                <button id="addIngredientBtn" class="btn btn-primary">Add Ingredient</button>
+            </div>
+            <div id="ingredientsList" class="data-table">
+                <!-- Ingredients table will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="orders-tab" class="tab-content">
+            <h2>Orders Management</h2>
+            <div id="ordersList" class="data-table">
+                <!-- Orders table will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content">
+            <h2>Reports</h2>
+            <div class="reports-section">
+                <div class="report-card">
+                    <h3>Sales Report</h3>
+                    <div id="salesReport"></div>
+                </div>
+                <div class="report-card">
+                    <h3>Inventory Status</h3>
+                    <div id="inventoryReport"></div>
+                </div>
+                <div class="report-card">
+                    <h3>Ingredients Status</h3>
+                    <div id="ingredientsReport"></div>
+                </div>
+                <div class="report-card">
+                    <h3>Top Selling Products</h3>
+                    <div id="productSalesReport"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="productModalTitle">Add Product</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <input type="text" id="productCategory">
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="text" id="productImageUrl">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Ingredient Modal -->
+    <div id="ingredientModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="ingredientModalTitle">Add Ingredient</h2>
+            <form id="ingredientForm">
+                <input type="hidden" id="ingredientId">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="ingredientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Unit:</label>
+                    <input type="text" id="ingredientUnit" placeholder="e.g., kg, lbs, oz" required>
+                </div>
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <input type="number" id="ingredientQuantity" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Cost per Unit:</label>
+                    <input type="number" id="ingredientCost" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Minimum Quantity:</label>
+                    <input type="number" id="ingredientMinQty" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Ingredient</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Details</h2>
+            <div id="orderDetails"></div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
