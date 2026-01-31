@@ -1,4 +1,6 @@
 // POS functionality
+const TAX_RATE = 0.08; // 8% tax rate
+
 let posCart = [];
 let posProducts = [];
 
@@ -77,7 +79,7 @@ function updatePosCartQuantity(productId, change) {
 function updatePosCartDisplay() {
     const cartItemsDiv = document.getElementById('posCartItems');
     const subtotal = posCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = subtotal * 0.08; // 8% tax
+    const tax = subtotal * TAX_RATE;
     const total = subtotal + tax;
     
     cartItemsDiv.innerHTML = posCart.length === 0 

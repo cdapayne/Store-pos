@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { db, initDatabase } = require('./database');
@@ -8,8 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize database
@@ -250,7 +249,7 @@ app.post('/api/orders', (req, res) => {
     const orderId = uuidv4();
     const { order_type, customer_name, customer_email, customer_phone, items, payment_method } = req.body;
     
-    // Calculate total
+    // Calculate total and validate stock
     let total = 0;
     const orderItems = [];
     
@@ -258,6 +257,12 @@ app.post('/api/orders', (req, res) => {
       const product = db.prepare('SELECT * FROM products WHERE id = ?').get(item.product_id);
       if (!product) {
         return res.status(400).json({ error: `Product ${item.product_id} not found` });
+      }
+      
+      // Check inventory availability
+      const inventory = db.prepare('SELECT quantity FROM inventory WHERE product_id = ?').get(item.product_id);
+      if (!inventory || inventory.quantity < item.quantity) {
+        return res.status(400).json({ error: `Insufficient stock for ${product.name}. Available: ${inventory?.quantity || 0}, Requested: ${item.quantity}` });
       }
       
       const subtotal = product.price * item.quantity;
@@ -322,29 +327,33 @@ app.put('/api/orders/:id/status', (req, res) => {
   try {
     const { status, payment_status } = req.body;
     
-    const updates = [];
-    const values = [];
+    if (!status && !payment_status) {
+      return res.status(400).json({ error: 'No updates provided' });
+    }
     
     if (status) {
-      updates.push('status = ?');
-      values.push(status);
       if (status === 'completed') {
-        updates.push('completed_at = CURRENT_TIMESTAMP');
+        db.prepare(`
+          UPDATE orders
+          SET status = ?, completed_at = CURRENT_TIMESTAMP
+          WHERE id = ?
+        `).run(status, req.params.id);
+      } else {
+        db.prepare(`
+          UPDATE orders
+          SET status = ?
+          WHERE id = ?
+        `).run(status, req.params.id);
       }
     }
     
     if (payment_status) {
-      updates.push('payment_status = ?');
-      values.push(payment_status);
+      db.prepare(`
+        UPDATE orders
+        SET payment_status = ?
+        WHERE id = ?
+      `).run(payment_status, req.params.id);
     }
-    
-    values.push(req.params.id);
-    
-    db.prepare(`
-      UPDATE orders
-      SET ${updates.join(', ')}
-      WHERE id = ?
-    `).run(...values);
     
     res.json({ message: 'Order updated successfully' });
   } catch (error) {
